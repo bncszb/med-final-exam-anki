@@ -48,9 +48,12 @@ def main():
     task_group_response = get_task_groups()
     task_groups = task_group_response.result.task_groups
     if settings.TEST_RUN:
-        task_groups = task_groups[1:2]
+        task_groups = task_groups[:2]
+
+    output_data = []
 
     for task_group in task_groups:
+        group_data = {"name": task_group.name, "chapters": []}
         if task_group.chapters:
             chapters = task_group.chapters
             if settings.TEST_RUN:
@@ -68,12 +71,21 @@ def main():
                     chapter_id=chapter.id,
                     limit=count,
                 )
-                print(questions)
+                chapter_data = {
+                    "name": chapter.name,
+                    "questions": [q.model_dump() for q in questions],
+                }
+                group_data["chapters"].append(chapter_data)
         else:
             count = get_questions_count(task_group_id=task_group.id)
             print(f"Fetching {count} questions for {task_group.name}")
             questions = get_questions(task_group_id=task_group.id, limit=count)
-            print(questions)
+            group_data["questions"] = [q.model_dump() for q in questions]
+
+        output_data.append(group_data)
+
+    with open(settings.JSON_OUTPUT_PATH, "w") as f:
+        json.dump(output_data, f, indent=2, ensure_ascii=False)
 
 
 if __name__ == "__main__":

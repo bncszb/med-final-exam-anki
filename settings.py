@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     JSESSIONID: str = ""
     COLLECTION_ID: int = 26
     TEST_RUN: bool = False
+    JSON_OUTPUT_PATH: str = "output.json"
 
     class Config:
         env_file = ".env"
