@@ -37,7 +37,7 @@ class QuestionAnswer(BaseModel):
     text: str = Field(alias="szoveg")
     explanation: Optional[str] = Field(alias="magyarazat")
     id: int
-    text_plain_text: str = Field(alias="szovegPlaintext")
+    text_plain_text: Optional[str] = Field(alias="szovegPlaintext")
 
 
 class AssociationItemLink(BaseModel):
