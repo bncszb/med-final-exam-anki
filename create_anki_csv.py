@@ -97,6 +97,9 @@ def create_regular_question_row(question: Question, deck_name: str) -> Optional[
     if not answers:
         return None
 
+    # Sort answers by letter (A, B, C...)
+    answers = sorted(answers, key=lambda ans: ans.letter)
+
     possible_answers = "<br>".join(
         [f"{ans.letter}) {ans.text_plain_text}" for ans in answers]
     )
