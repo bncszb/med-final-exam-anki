@@ -48,7 +48,7 @@ def main():
     task_group_response = get_task_groups()
     task_groups = task_group_response.result.task_groups
     if settings.TEST_RUN:
-        task_groups = task_groups[:1]
+        task_groups = task_groups[1:2]
 
     for task_group in task_groups:
         if task_group.chapters:

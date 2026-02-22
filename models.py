@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import List, Optional
+from typing import List, Optional, Union
 
 
 class Chapter(BaseModel):
@@ -40,20 +40,50 @@ class QuestionAnswer(BaseModel):
     text_plain_text: str = Field(alias="szovegPlaintext")
 
 
+class AssociationItemLink(BaseModel):
+    question_id: int = Field(alias="kerdesId")
+    id: int
+
+
+class AssociationItem(BaseModel):
+    has_image: int = Field(alias="vanKepIn")
+    letter: str = Field(alias="betujel")
+    text: str = Field(alias="szoveg")
+    links: List[AssociationItemLink] = Field(alias="asszociaciosLeirasTetel")
+    id: int
+    text_plain_text: str = Field(alias="szovegPlaintext")
+
+
+class Association(BaseModel):
+    to_sub_serial_number: Optional[int] = Field(alias="alsorszamIg")
+    serial_number: str = Field(alias="csorszam")
+    from_sub_serial_number: Optional[int] = Field(alias="alsorszamTol")
+    items: List[AssociationItem] = Field(alias="leirasTetelAsszociacios")
+    has_image: int = Field(alias="vanKepIn")
+    from_sub_sub_serial_number: Optional[int] = Field(alias="subsorszamTol")
+    description: str = Field(alias="leiras")
+    id: int
+    description_plain_text: str = Field(alias="leirasPlaintext")
+    from_serial_number: int = Field(alias="sorszamTol")
+    to_sub_sub_serial_number: Optional[int] = Field(alias="subsorszamIg")
+    to_serial_number: int = Field(alias="sorszamIg")
+
+
 class Question(BaseModel):
     serial_number: str = Field(alias="csorszam")
     explanation_plain_text: Optional[str] = Field(alias="magyarazatPlaintext")
     sub_serial_number: int = Field(alias="alSorszam")
     sub_sub_serial_number: int = Field(alias="subSorszam")
     has_image: int = Field(alias="vanKepIn")
-    answers: List[QuestionAnswer] = Field(alias="kerdesValasz")
+    answers: Optional[List[QuestionAnswer]] = Field(alias="kerdesValasz", default=None)
     description: str = Field(alias="leiras")
     difficulty: Optional[int] = Field(alias="nehezseg")
     task_type_id: int = Field(alias="feladatTipusId")
-    status_id: Optional[int] = Field(alias="statuszId")
+    status_id: Optional[Union[str, int]] = Field(alias="statuszId")
     sorszam: int
     explanation: Optional[str] = Field(alias="magyarazat")
     id: int
     description_plain_text: str = Field(alias="leirasPlaintext")
     is_not_permanent: bool = Field(alias="nemperm")
     is_active: bool = Field(alias="aktiv")
+    association: Optional[Association] = Field(alias="asszociaciosLeiras", default=None)
