@@ -26,7 +26,7 @@ def get_questions_count(
 
 
 def get_questions(
-    task_group_id: int,
+    task_group_id: int | None = None,
     chapter_id: Optional[int] = None,
     offset: int = 0,
     limit: int = 20,
@@ -60,27 +60,25 @@ def main():
                 chapters = chapters[:1]
             for chapter in chapters:
                 count = get_questions_count(
-                    # task_group_id=task_group.id,
                     chapter_id=chapter.id,
                 )
                 print(
                     f"Fetching {count} questions for {task_group.name} - {chapter.name}"
                 )
                 questions = get_questions(
-                    task_group_id=task_group.id,
                     chapter_id=chapter.id,
                     limit=count,
                 )
                 chapter_data = {
                     "name": chapter.name,
-                    "questions": [q.model_dump() for q in questions],
+                    "questions": [q.model_dump(by_alias=True) for q in questions],
                 }
                 group_data["chapters"].append(chapter_data)
         else:
             count = get_questions_count(task_group_id=task_group.id)
             print(f"Fetching {count} questions for {task_group.name}")
             questions = get_questions(task_group_id=task_group.id, limit=count)
-            group_data["questions"] = [q.model_dump() for q in questions]
+            group_data["questions"] = [q.model_dump(by_alias=True) for q in questions]
 
         output_data.append(group_data)
 
