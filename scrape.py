@@ -1,9 +1,8 @@
 import json
-from typing import List, Optional
 
 import requests
 
-from models import Question, TaskGroupResponse, GroupOutput, ChapterOutput
+from models import ChapterOutput, GroupOutput, Question, TaskGroupResponse
 from settings import HEADERS, settings
 
 
@@ -27,10 +26,10 @@ def get_questions_count(
 
 def get_questions(
     task_group_id: int | None = None,
-    chapter_id: Optional[int] = None,
+    chapter_id: int | None = None,
     offset: int = 0,
     limit: int = 20,
-) -> List[Question]:
+) -> list[Question]:
     url = f"{settings.API_URL}/kerdesControl/getQuestionByLimit"
     data = {
         "feladatcsoport_id": task_group_id,

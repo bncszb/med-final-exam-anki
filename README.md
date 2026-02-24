@@ -15,6 +15,8 @@ The tool currently handles the following question types:
 1.  **Multiple Choice**: Standard questions with options A, B, C, D, E.
 2.  **Pairing Questions (Párosítás)**: Questions where you match items from a list (e.g., A, B, C, D) to statements (1, 2, 3...).
 3.  **Combination Questions**: Questions involving a set of statements (1, 2, 3, 4) and options that are combinations of these statements (e.g., "A: 1, 2, 3 are correct").
+4.  **Case Description Questions**: Questions that include a detailed clinical case description followed by a question and options.
+5.  **Relation Analysis**: Questions asking to analyze the relationship between two statements.
 
 ## Prerequisites
 
@@ -24,6 +26,7 @@ The tool currently handles the following question types:
 ## Setup
 
 1.  **Clone the repository**:
+
     ```bash
     git clone <repository-url>
     cd <repository-directory>
@@ -40,6 +43,7 @@ The tool currently handles the following question types:
 
 1.  **Scrape Questions**:
     Run the scraper to fetch questions and save them to `output/output.json`:
+
     ```bash
     uv run scrape.py
     ```

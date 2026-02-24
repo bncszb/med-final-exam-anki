@@ -1,12 +1,13 @@
-import json
 import csv
+import json
 from pathlib import Path
+
 from models import GroupOutput
 from utils import process_question_list
 
 
 def main():
-    with open("output/output.json", "r") as f:
+    with open("output/output.json") as f:
         data = json.load(f)
     
     groups = [GroupOutput(**group_data) for group_data in data]

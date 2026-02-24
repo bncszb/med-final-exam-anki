@@ -1,12 +1,12 @@
-from typing import List, Optional, Dict
 from models import Question
 
-def process_question_list(questions: List[Question], deck_name: str) -> List[List[str]]:
+
+def process_question_list(questions: list[Question], deck_name: str) -> list[list[str]]:
     rows = []
     processed_pairing_ids = set()
 
     # Pre-group pairing questions by association ID for efficiency
-    pairing_groups: Dict[int, List[Question]] = {}
+    pairing_groups: dict[int, list[Question]] = {}
     for q in questions:
         if q.task_type_id == 3 and q.association:
             if q.association.id not in pairing_groups:
@@ -14,18 +14,8 @@ def process_question_list(questions: List[Question], deck_name: str) -> List[Lis
             pairing_groups[q.association.id].append(q)
 
     for question in questions:
-        if question.task_type_id in [1, 2, 6, 7]:  # Regular question types
-            # Check if it is the new question type (element answers)
-            if question.element_answers:
-                row = create_element_answer_question_row(question, deck_name)
-                if row:
-                    rows.append(row)
-            else:
-                row = create_regular_question_row(question, deck_name)
-                if row:
-                    rows.append(row)
-        
-        elif question.task_type_id == 3:  # Pairing question type
+        # 1. Pairing Questions (Task Type 3)
+        if question.task_type_id == 3:
             if not question.association:
                 continue
             
@@ -40,13 +30,29 @@ def process_question_list(questions: List[Question], deck_name: str) -> List[Lis
                 row = create_pairing_question_row(group_questions, deck_name)
                 if row:
                     rows.append(row)
+        
+        # 2. Regular Questions (All other types)
+        # Includes: 
+        # - Case Description (Type 1 with case_description)
+        # - Element Answers (Type 2, rendered with element_answers)
+        # - Relation Analysis (Type 4)
+        else:
+            row = create_regular_question_row(question, deck_name)
+            if row:
+                rows.append(row)
                     
     return rows
 
 
-def create_regular_question_row(question: Question, deck_name: str) -> Optional[List[str]]:
+def create_regular_question_row(question: Question, deck_name: str) -> list[str] | None:
     question_field = ""
     answer_field = ""
+
+    # Check for case description
+    case_desc = question.case_description.description_plain_text if question.case_description else ""
+    
+    # Check for element answers
+    element_answers = question.element_answers
 
     question_text = question.description_plain_text
     answers = question.answers
@@ -59,7 +65,32 @@ def create_regular_question_row(question: Question, deck_name: str) -> Optional[
     possible_answers = "<br>".join(
         [f"{ans.letter}) {ans.text_plain_text}" for ans in answers]
     )
-    question_field = f"{question_text}<br><br>{possible_answers}"
+    
+    # Construct Question Field
+    question_parts = []
+    
+    # 1. Case Description (if exists)
+    if case_desc:
+        question_parts.append(f"<b>Esetleírás:</b><br>{case_desc}")
+        
+    # 2. Question Text
+    # For Case Description type, we add "Kérdés:" header if case_desc exists
+    if case_desc:
+        question_parts.append(f"<b>Kérdés:</b><br>{question_text}")
+    else:
+        question_parts.append(question_text)
+        
+    # 3. Element Answers (if exists) - Rendered as numbered list
+    if element_answers:
+        # Sort element answers by number (1, 2, 3...)
+        sorted_elements = sorted(element_answers, key=lambda ea: ea.number)
+        element_lines = [f"{ea.number}. {ea.text}" for ea in sorted_elements]
+        question_parts.append("<br>".join(element_lines))
+        
+    # 4. Possible Answers (A, B, C...)
+    question_parts.append(f"<br>{possible_answers}")
+    
+    question_field = "<br><br>".join(question_parts)
 
     correct_answer = next((ans for ans in answers if ans.is_correct), None)
     if not correct_answer:
@@ -77,7 +108,7 @@ def create_regular_question_row(question: Question, deck_name: str) -> Optional[
         return None
 
 
-def create_pairing_question_row(questions: List[Question], deck_name: str) -> Optional[List[str]]:
+def create_pairing_question_row(questions: list[Question], deck_name: str) -> list[str] | None:
     if not questions:
         return None
     
@@ -125,54 +156,6 @@ def create_pairing_question_row(questions: List[Question], deck_name: str) -> Op
              answer_parts.append(f"<br>{q.explanation}<br>")
         
     answer_field = "<br>".join(answer_parts)
-
-    if question_field and answer_field:
-        return [question_field, answer_field, deck_name]
-    else:
-        return None
-
-def create_element_answer_question_row(question: Question, deck_name: str) -> Optional[List[str]]:
-    question_field = ""
-    answer_field = ""
-
-    question_text = question.description_plain_text
-    answers = question.answers
-    element_answers = question.element_answers
-    
-    if not answers or not element_answers:
-        return None
-
-    # Sort element answers by number (1, 2, 3...)
-    element_answers = sorted(element_answers, key=lambda ea: ea.number)
-    
-    # Sort answers by letter (A, B, C...)
-    answers = sorted(answers, key=lambda ans: ans.letter)
-
-    # Build question field
-    # Main description
-    question_parts = [question_text, ""]
-    
-    # Element answers (1., 2., 3., 4.)
-    for ea in element_answers:
-        question_parts.append(f"{ea.number}. {ea.text}")
-    
-    question_parts.append("")
-    
-    # Possible combination answers (A, B, C, D, E)
-    for ans in answers:
-        question_parts.append(f"{ans.letter}) {ans.text_plain_text}")
-
-    question_field = "<br>".join(question_parts)
-
-    correct_answer = next((ans for ans in answers if ans.is_correct), None)
-    if not correct_answer:
-        return None
-
-    answer_field = (
-        f"A helyes válasz: {correct_answer.letter}) {correct_answer.text_plain_text}"
-    )
-    if correct_answer.explanation:
-        answer_field += f"<br><br><b>Magyarázat:</b><br>{correct_answer.explanation}"
 
     if question_field and answer_field:
         return [question_field, answer_field, deck_name]
