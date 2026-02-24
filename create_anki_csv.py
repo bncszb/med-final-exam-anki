@@ -1,21 +1,8 @@
 import json
 import csv
 from pathlib import Path
-from typing import List, Optional
-from pydantic import BaseModel
-from models import Question
+from models import GroupOutput
 from utils import process_question_list
-
-
-class ChapterOutput(BaseModel):
-    name: str
-    questions: List[Question]
-
-
-class GroupOutput(BaseModel):
-    name: str
-    chapters: Optional[List[ChapterOutput]] = None
-    questions: Optional[List[Question]] = None
 
 
 def main():

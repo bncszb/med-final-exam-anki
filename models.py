@@ -95,3 +95,14 @@ class Question(BaseModel):
     is_active: bool = Field(alias="aktiv")
     association: Optional[Association] = Field(alias="asszociaciosLeiras", default=None)
     element_answers: Optional[List[QuestionElementAnswer]] = Field(alias="kerdesElemiValasz", default=None)
+
+
+class ChapterOutput(BaseModel):
+    name: str
+    questions: List[Question]
+
+
+class GroupOutput(BaseModel):
+    name: str
+    chapters: Optional[List[ChapterOutput]] = None
+    questions: Optional[List[Question]] = None

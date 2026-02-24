@@ -9,3 +9,8 @@ dependencies = [
     "pydantic-settings>=2.13.1",
     "requests>=2.32.5",
 ]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.2",
+]

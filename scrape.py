@@ -3,7 +3,7 @@ from typing import List, Optional
 
 import requests
 
-from models import Question, TaskGroupResponse
+from models import Question, TaskGroupResponse, GroupOutput, ChapterOutput
 from settings import HEADERS, settings
 
 
@@ -53,8 +53,9 @@ def main():
     output_data = []
 
     for task_group in task_groups:
-        group_data = {"name": task_group.name, "chapters": []}
+        group_output = GroupOutput(name=task_group.name)
         if task_group.chapters:
+            group_output.chapters = []
             chapters = task_group.chapters
             if settings.TEST_RUN:
                 chapters = chapters[:1]
@@ -69,18 +70,18 @@ def main():
                     chapter_id=chapter.id,
                     limit=count,
                 )
-                chapter_data = {
-                    "name": chapter.name,
-                    "questions": [q.model_dump(by_alias=True) for q in questions],
-                }
-                group_data["chapters"].append(chapter_data)
+                chapter_output = ChapterOutput(
+                    name=chapter.name,
+                    questions=questions
+                )
+                group_output.chapters.append(chapter_output)
         else:
             count = get_questions_count(task_group_id=task_group.id)
             print(f"Fetching {count} questions for {task_group.name}")
             questions = get_questions(task_group_id=task_group.id, limit=count)
-            group_data["questions"] = [q.model_dump(by_alias=True) for q in questions]
+            group_output.questions = questions
 
-        output_data.append(group_data)
+        output_data.append(group_output.model_dump(by_alias=True))
 
     with open(settings.JSON_OUTPUT_PATH, "w") as f:
         json.dump(output_data, f, indent=2, ensure_ascii=False)
