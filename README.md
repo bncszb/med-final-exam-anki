@@ -688,3 +688,102 @@ response:
     },
 ...
 ```
+
+```
+ {
+        "csorszam": "BGY - 6.20",
+        "magyarazatPlaintext": null,
+        "fejezetId": 6,
+        "alSorszam": 20,
+        "subSorszam": 0,
+        "vanKepIn": 0,
+        "kerdesValasz": [
+            {
+                "helyes": 0,
+                "magyarazatPlaintext": "",
+                "vanKepIn": 0,
+                "betujel": "D",
+                "szoveg": "csak a 4. válasz helyes",
+                "magyarazat": "",
+                "id": 133427,
+                "szovegPlaintext": "csak a 4. válasz helyes"
+            },
+            {
+                "helyes": 1,
+                "magyarazatPlaintext": "A szénhidrátok felszívódási zavarait (különböző szinteken) a kérdésben felsorolt lehetőségek egyaránt jellemzik.",
+                "vanKepIn": 0,
+                "betujel": "E",
+                "szoveg": "mind a 4 válasz helyes",
+                "magyarazat": "A szénhidrátok felszívódási zavarait (különböző szinteken) a kérdésben felsorolt lehetőségek egyaránt jellemzik.",
+                "id": 133428,
+                "szovegPlaintext": "mind a 4 válasz helyes"
+            },
+            {
+                "helyes": 0,
+                "magyarazatPlaintext": "",
+                "vanKepIn": 0,
+                "betujel": "B",
+                "szoveg": "az 1. és 3. válasz helyes",
+                "magyarazat": "",
+                "id": 133425,
+                "szovegPlaintext": "az 1. és 3. válasz helyes"
+            },
+            {
+                "helyes": 0,
+                "magyarazatPlaintext": "",
+                "vanKepIn": 0,
+                "betujel": "C",
+                "szoveg": "a 2. és 4. válasz helyes",
+                "magyarazat": "",
+                "id": 133426,
+                "szovegPlaintext": "a 2. és 4. válasz helyes"
+            },
+            {
+                "helyes": 0,
+                "magyarazatPlaintext": "",
+                "vanKepIn": 0,
+                "betujel": "A",
+                "szoveg": "az 1., 2. és 3. válasz helyes",
+                "magyarazat": "",
+                "id": 133424,
+                "szovegPlaintext": "az 1., 2. és 3. válasz helyes"
+            }
+        ],
+        "leiras": "A szénhidrátok felszívódási zavarait az alábbiak jellemzik:",
+        "nehezseg": null,
+        "feladatTipusId": 2,
+        "statuszId": null,
+        "sorszam": 6,
+        "magyarazat": null,
+        "id": 31813,
+        "kerdesElemiValasz": [
+            {
+                "vanKepIn": 0,
+                "szam": "1",
+                "szoveg": "alacsony cukorterheléses görbe",
+                "id": 17395
+            },
+            {
+                "vanKepIn": 0,
+                "szam": "2",
+                "szoveg": "laktózterhelés során hasmenés jelentkezik",
+                "id": 17396
+            },
+            {
+                "vanKepIn": 0,
+                "szam": "3",
+                "szoveg": "lapos keményítőterhelési görbe",
+                "id": 17397
+            },
+            {
+                "vanKepIn": 0,
+                "szam": "4",
+                "szoveg": "laktulózterhelés során a kilégzett levegő hidrogén mennyisége megnövekszik",
+                "id": 17398
+            }
+        ],
+        "leirasPlaintext": "A szénhidrátok felszívódási zavarait az alábbiak jellemzik:",
+        "nemperm": true,
+        "aktiv": true
+    },
+```

@@ -40,6 +40,13 @@ class QuestionAnswer(BaseModel):
     text_plain_text: Optional[str] = Field(alias="szovegPlaintext")
 
 
+class QuestionElementAnswer(BaseModel):
+    has_image: int = Field(alias="vanKepIn")
+    number: str = Field(alias="szam")
+    text: str = Field(alias="szoveg")
+    id: int
+
+
 class AssociationItemLink(BaseModel):
     question_id: int = Field(alias="kerdesId")
     id: int
@@ -87,3 +94,4 @@ class Question(BaseModel):
     is_not_permanent: bool = Field(alias="nemperm")
     is_active: bool = Field(alias="aktiv")
     association: Optional[Association] = Field(alias="asszociaciosLeiras", default=None)
+    element_answers: Optional[List[QuestionElementAnswer]] = Field(alias="kerdesElemiValasz", default=None)
